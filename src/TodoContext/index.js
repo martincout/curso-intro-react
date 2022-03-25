@@ -27,6 +27,16 @@ function TodoProvider(props) {
     });
   }
 
+  const addTodo = (text) => {
+    const newTodos = [...todos];
+    newTodos.push({
+      completed: false,
+      text
+    })
+    saveTodos(newTodos);
+    //Si pongo en SetTodos(todos) react no re-renderiza de nuevo TodoItem, solo cuando hago un cambio en el codigo.
+  };
+
   const completeTodo = (text) => {
     const todoIndex = todos.findIndex(todo => todo.text === text);
     const newTodos = [...todos];
@@ -51,6 +61,7 @@ function TodoProvider(props) {
       searchValue,
       setSearchValue,
       searchedTodos,
+      addTodo,
       completeTodo,
       deleteTodo,
       openModal,
