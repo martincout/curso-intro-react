@@ -8,6 +8,8 @@ import { TodoContext } from '../TodoContext';
 import TodoForm from '../TodoForm';
 import Modal from '../Modal';
 import {TodoLoader} from '../TodoLoader';
+import EmptyTodo from '../EmptyTodo';
+import TodoError from '../TodoError';
 
 export default function AppUi() {
     const {
@@ -24,9 +26,9 @@ export default function AppUi() {
             <TodoCounter />
             <TodoSearch />
             <TodoList>
-                {error && <p>Desespérate, hubo un error...</p>}
+                {error && <TodoError/>}
                 {loading && <TodoLoader/>}
-                {(!loading && !searchedTodos.length) && <p>¡Crea tu primer TODO!</p>}
+                {(!loading && !searchedTodos.length) && <EmptyTodo></EmptyTodo>}
 
                 {searchedTodos.map(todo => (
                     <TodoItem
