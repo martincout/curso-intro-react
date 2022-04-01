@@ -1,23 +1,70 @@
 import React from 'react';
-import { TodoProvider } from '../TodoContext';
-import AppUI from './AppUI';
-
-// import './App.css';
-
-// const defaultTodos = [
-//   { text: 'Cortar cebolla', completed: true },
-//   { text: 'Tomar el cursso de intro a React', completed: false },
-//   { text: 'Llorar con la llorona', completed: false },
-//   { text: 'LALALALAA', completed: false },
-// ];
+import { TodoCounter } from '../TodoCounter';
+import { TodoSearch } from '../TodoSearch';
+import { TodoList } from '../TodoList';
+import { TodoItem } from '../TodoItem';
+import { CreateTodoButton } from '../CreateTodoButton';
+import { useTodos } from './useTodos';
+import TodoForm from '../TodoForm';
+import Modal from '../Modal';
+import {TodoLoader} from '../TodoLoader';
+import EmptyTodo from '../EmptyTodo';
+import TodoError from '../TodoError';
 
 function App() {
- 
+  const {
+    error,
+    loading,
+    searchedTodos,
+    completeTodo,
+    deleteTodo,
+    openModal,
+    totalTodos,
+    completedTodos,
+    searchValue, 
+    setSearchValue,
+    setOpenModal,
+    addTodo,
+} = useTodos();
   return (
-    <TodoProvider>
-      <AppUI />
-    </TodoProvider>
-  );
+    <React.Fragment>
+        <TodoCounter 
+            totalTodos={totalTodos}
+            completedTodos={completedTodos}
+        />
+        <TodoSearch 
+            searchValue={searchValue}
+            setSearchValue={setSearchValue}
+        />
+        <TodoList>
+            {error && <TodoError/>}
+            {loading && <TodoLoader/>}
+            {(!loading && !searchedTodos.length) && <EmptyTodo></EmptyTodo>}
+
+            {searchedTodos.map(todo => (
+                <TodoItem
+                    key={todo.text}
+                    text={todo.text}
+                    completed={todo.completed}
+                    onComplete={() => completeTodo(todo.text)}
+                    onDelete={() => deleteTodo(todo.text)}
+                />
+            ))}
+        </TodoList>
+        {openModal && (
+            <Modal>
+                <TodoForm
+                    setOpenModal={setOpenModal}
+                    addTodo={addTodo}
+                ></TodoForm>
+            </Modal>
+        )}
+        
+        <CreateTodoButton 
+            setOpenModal = {setOpenModal}
+        />
+    </React.Fragment>
+)
 }
 
 export default App;
